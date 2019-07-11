@@ -136,9 +136,9 @@ const initDB = (options, log = console) => {
       db.set("debug", options.debug);
       // load the local or external databse
       if (options.local) {
-        await LoadLocalDB();
+        await LoadLocalDB(log);
       } else {
-        await LoadExternalDB();
+        await LoadExternalDB(log);
       }
 
       // load the models
