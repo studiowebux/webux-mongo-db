@@ -35,7 +35,7 @@ function LoadLocalDB(log = console) {
       useNewUrlParser: true
     };
 
-    return mongoServerInstance.start((error, dbConfig) => {
+    mongoServerInstance.start((error, dbConfig) => {
       if (error) {
         log.error(
           "DB : An error occur while connecting to the mongo in memory database",
@@ -51,7 +51,7 @@ function LoadLocalDB(log = console) {
 
         const mongouri = mongoServerInstance.getMongouri("localtest");
 
-        return db.connect(mongouri, opts, err => {
+        db.connect(mongouri, opts, err => {
           if (err) {
             log.error(
               "DB : An error occur while connecting to the mongo in memory database",
