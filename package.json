@@ -1,6 +1,6 @@
 {
   "name": "webux-mongo-db",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Webux wrapper for mongoose and mongo-in-memory",
   "homepage": "https://github.com/studiowebux/webux-mongo-db",
   "repository": {
