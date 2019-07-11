@@ -1,0 +1,27 @@
+{
+  "name": "webux-mongo-db",
+  "version": "1.0.0",
+  "description": "Webux wrapper for mongoose and mongo-in-memory",
+  "homepage": "https://github.com/studiowebux/webux-mongo-db",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/studiowebux/webux-mongo-db.git"
+  },
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "mongoose": "^5.6.4",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "mongo-in-memory": "0.0.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Studio Webux S.E.N.C",
+  "license": "SEE LICENSE IN license.txt"
+}
