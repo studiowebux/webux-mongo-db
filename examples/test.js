@@ -18,10 +18,11 @@ const options = {
   }
 };
 
-const { initDB } = require("../index");
+const { initDB, LoadModels } = require("../index");
 
 async function loadApp() {
   await initDB(options);
+  await LoadModels(options.modelDir, options.sort);
 
   // generate data...
   const User = require("./models/user");
@@ -47,7 +48,7 @@ async function loadApp() {
     });
   await Language.create({ language: "en" });
 
-  console.log("done")
+  console.log("done");
 }
 
 loadApp();

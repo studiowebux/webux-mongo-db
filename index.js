@@ -133,7 +133,7 @@ const initDB = (options, log = console) => {
     }
     try {
       // set the mongoose to work with promises
-      db.Promise = global.Promise
+      db.Promise = global.Promise;
       // enable the database debugger
       db.set("debug", options.debug);
       // load the local or external databse
@@ -143,8 +143,6 @@ const initDB = (options, log = console) => {
         await LoadExternalDB(log);
       }
 
-      // load the models
-      LoadModels(options.modelDir, options.sort, log);
       return resolve(db);
     } catch (e) {
       return reject(e);
@@ -161,22 +159,26 @@ const initDB = (options, log = console) => {
  */
 const LoadModels = (modelDir, sort = [], log = console) => {
   log.info("DB : Loading Modules...");
+  return new Promise((resolve, reject) => {
+    let files = sort && sort.length !== 0 ? sort : fs.readdirSync(modelDir);
 
-  let files = sort && sort.length !== 0 ? sort : fs.readdirSync(modelDir);
+    files.forEach(filename => {
+      try {
+        log.info("DB Module :  Load " + filename);
+        require(path.join(modelDir, filename));
+        log.info("DB Module : " + filename + " Loaded");
+      } catch (e) {
+        log.error("DB Module : " + filename + " Not Loaded");
+        return reject(e);
+      }
+    });
 
-  files.forEach(filename => {
-    try {
-      log.info("DB Module :  Load " + filename);
-      require(path.join(modelDir, filename));
-      log.info("DB Module : " + filename + " Loaded");
-    } catch (e) {
-      log.error("DB Module : " + filename + " Not Loaded");
-      throw new Error(e);
-    }
+    return resolve();
   });
 };
 
 module.exports = {
   initDB,
+  LoadModels,
   db
 };
