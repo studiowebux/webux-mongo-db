@@ -27,22 +27,27 @@ async function loadApp() {
   const User = require("./models/user");
   const Language = require("./models/language");
 
-  User.create({ fullname: "Bobby" })
-    .then(created => {
+  await User.create({ fullname: "Bobby" })
+    .then(async created => {
       console.log(created);
 
-      User.find()
-        .then(created => {
-          console.log(created);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      try {
+        const users = await User.find();
+        if (!users) {
+          console.error("No users found");
+        }
+
+        console.log(users);
+      } catch (e) {
+        console.error(e);
+      }
     })
     .catch(error => {
       console.error(error);
     });
-  Language.create({ language: "en" });
+  await Language.create({ language: "en" });
+
+  console.log("done")
 }
 
 loadApp();

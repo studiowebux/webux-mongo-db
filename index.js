@@ -132,6 +132,8 @@ const initDB = (options, log = console) => {
       return reject(new Error("The log parameter must be an object"));
     }
     try {
+      // set the mongoose to work with promises
+      db.Promise = global.Promise
       // enable the database debugger
       db.set("debug", options.debug);
       // load the local or external databse
