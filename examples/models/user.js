@@ -14,13 +14,12 @@
 
 "use strict";
 
-const { db } = require("../../index");
-
-const userSchema = db.Schema(
-  {
-    fullname: { type: String, required: true }
-  },
-  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
-);
-
-module.exports = db.model("User", userSchema);
+module.exports = db => {
+  const userSchema = db.Schema(
+    {
+      fullname: { type: String, required: true }
+    },
+    { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+  );
+  return db.model("User", userSchema);
+};

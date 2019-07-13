@@ -14,13 +14,12 @@
 
 "use strict";
 
-const { db } = require("../../index");
-
-const languageSchema = db.Schema(
-  {
-    language: { type: String, required: true }
-  },
-  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
-);
-
-module.exports = db.model("Language", languageSchema);
+module.exports = db => {
+  const languageSchema = db.Schema(
+    {
+      language: { type: String, required: true }
+    },
+    { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+  );
+  return db.model("Language", languageSchema);
+};

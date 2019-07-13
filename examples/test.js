@@ -18,22 +18,20 @@ const options = {
   }
 };
 
-const { initDB, LoadModels } = require("../index");
+const webuxDB = require("../index");
 
 async function loadApp() {
-  await initDB(options);
-  await LoadModels(options.modelDir, options.sort);
+  // call db
+  const db = new webuxDB(options);
+  await db.InitDB();
+  await db.LoadModels();
 
-  // generate data...
-  const User = require("./models/user");
-  const Language = require("./models/language");
-
-  await User.create({ fullname: "Bobby" })
+  await db.User.create({ fullname: "Bobby" })
     .then(async created => {
       console.log(created);
 
       try {
-        const users = await User.find();
+        const users = await db.User.find();
         if (!users) {
           console.error("No users found");
         }
@@ -46,9 +44,11 @@ async function loadApp() {
     .catch(error => {
       console.error(error);
     });
-  await Language.create({ language: "en" });
+  await db.Language.create({ language: "en" });
 
   console.log("done");
 }
 
-loadApp();
+loadApp().then(() => {
+  process.exit(0);
+});

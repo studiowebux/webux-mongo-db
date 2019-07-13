@@ -1,11 +1,11 @@
 # Webux-app
 
-This module contains the definition of the whole app, it uses global variable to simplify the app structure.
+This module is a wrapper for mongoose.
 
 # Installation
 
 ```
-npm i --save webux-app
+npm i --save webux-mongo-db
 ```
 
 # Usage
@@ -38,49 +38,56 @@ the models scheme
 for example,
 
 ```
-const { db } = require("webux-mongo-db");
-
-const userSchema = db.Schema(
-  {
-    fullname: { type: String, required: true }
-  },
-  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
-);
-
-module.exports = db.model("User", userSchema);
+module.exports = db => {
+  const languageSchema = db.Schema(
+    {
+      language: { type: String, required: true }
+    },
+    { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+  );
+  return db.model("Language", languageSchema);
+};
 ```
 
 Short example to load the database and create dummy datas,
 
 ```
-const { initDB } = require("webux-mongo-db");
+const path = require("path");
+
+const webuxDB = require("webux-mongo-db");
 
 async function loadApp() {
-  await initDB(options);
+  const db = new webuxDB(options);
+  await db.InitDB();
+  await db.LoadModels();
 
-  // generate data...
-  const User = require("./models/user");
-  const Language = require("./models/language");
-
-  User.create({ fullname: "Bobby" })
-    .then(created => {
+  await db.User.create({ fullname: "Bobby" })
+    .then(async created => {
       console.log(created);
 
-      User.find()
-        .then(created => {
-          console.log(created);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      try {
+        const users = await db.User.find();
+        if (!users) {
+          console.error("No users found");
+        }
+
+        console.log(users);
+      } catch (e) {
+        console.error(e);
+      }
     })
     .catch(error => {
       console.error(error);
     });
-  Language.create({ language: "en" });
+  await db.Language.create({ language: "en" });
+
+  console.log("done");
 }
 
-loadApp();
+loadApp().then(() => {
+  process.exit(0);
+});
+
 ```
 
 ## Contributing
