@@ -80,19 +80,21 @@ function LoadModels() {
 
     files.forEach(filename => {
       try {
-        this.log.info("DB Module :  Load " + filename);
+        if (filename.indexOf(".js") > 0) {
+          this.log.info("DB Module :  Load " + filename);
 
-        let model = FirstLetterCaps(filename.split(".js")[0]);
-        this[model] = require(path.join(this.options.modelDir, filename))(
-          this.db
-        );
-        this.log.info(
-          "DB Module : ",
-          "\x1b[32m",
-          filename,
-          " Loaded",
-          "\x1b[0m"
-        );
+          let model = FirstLetterCaps(filename.split(".js")[0]);
+          this[model] = require(path.join(this.options.modelDir, filename))(
+            this.db
+          );
+          this.log.info(
+            "DB Module : ",
+            "\x1b[32m",
+            filename,
+            " Loaded",
+            "\x1b[0m"
+          );
+        }
       } catch (e) {
         this.log.error(e);
         this.log.error(
