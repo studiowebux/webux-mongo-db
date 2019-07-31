@@ -80,21 +80,25 @@ function LoadModels() {
 
     files.forEach(filename => {
       try {
-        if (filename.indexOf(".js") > 0) {
-          this.log.info("DB Module :  Load " + filename);
-
-          let model = FirstLetterCaps(filename.split(".js")[0]);
-          this[model] = require(path.join(this.options.modelDir, filename))(
-            this.db
-          );
-          this.log.info(
-            "DB Module : ",
-            "\x1b[32m",
-            filename,
-            " Loaded",
-            "\x1b[0m"
-          );
+        if (!this.options.sort || this.options.sort.length === 0) {
+          // if we are in auto detect mode
+          if (filename.indexOf(".js") === -1) {
+            // if the file does not contains .js extension.
+            return; // skip that file
+          }
         }
+        this.log.info("DB Module :  Load " + filename);
+        let model = FirstLetterCaps(filename.split(".js")[0]);
+        this[model] = require(path.join(this.options.modelDir, filename))(
+          this.db
+        );
+        this.log.info(
+          "DB Module : ",
+          "\x1b[32m",
+          filename,
+          " Loaded",
+          "\x1b[0m"
+        );
       } catch (e) {
         this.log.error(e);
         this.log.error(
