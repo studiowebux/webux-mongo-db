@@ -40,7 +40,7 @@ function InitDB() {
       mongoose.set("debug", this.options.debug);
       // load the local or external databse
       if (this.options.local) {
-        this.db = await LoadLocalDB(mongoose, this.log);
+        this.db = await LoadLocalDB(this.options, mongoose, this.log);
       } else {
         this.db = await LoadExternalDB(this.options, mongoose, this.log);
       }
