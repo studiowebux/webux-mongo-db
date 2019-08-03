@@ -3,6 +3,7 @@ const path = require("path");
 const options = {
   sort: [],
   local: true,
+  localPort: 27017,
   debug: true,
   URL: "@127.0.0.1:27017/framework",
   user: "",

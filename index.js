@@ -28,21 +28,29 @@ const { FirstLetterCaps } = require("./lib/helpers");
  */
 function InitDB() {
   return new Promise(async (resolve, reject) => {
-    if (!this.options || typeof this.options !== "object") {
-      return reject(
-        new Error("The options parameter is required and must be an object")
-      );
-    }
     try {
+      if (!this.options || typeof this.options !== "object") {
+        return reject(
+          new Error("The options parameter is required and must be an object")
+        );
+      }
       // set the mongoose to work with promises
       mongoose.Promise = global.Promise;
       // enable the database debugger
       mongoose.set("debug", this.options.debug);
       // load the local or external databse
       if (this.options.local) {
-        this.db = await LoadLocalDB(this.options, mongoose, this.log);
+        this.db = await LoadLocalDB(this.options, mongoose, this.log).catch(
+          e => {
+            throw e;
+          }
+        );
       } else {
-        this.db = await LoadExternalDB(this.options, mongoose, this.log);
+        this.db = await LoadExternalDB(this.options, mongoose, this.log).catch(
+          e => {
+            throw e;
+          }
+        );
       }
 
       return resolve();
