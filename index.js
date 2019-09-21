@@ -6,7 +6,7 @@
 //  ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
 
 /**
- * File: db.js
+ * File: index.js
  * Author: Tommy Gingras
  * Date: 2018-07-05
  * License: All rights reserved Studio Webux S.E.N.C 2015-Present
@@ -14,116 +14,14 @@
 
 "use strict";
 
-let mongoose = require("mongoose");
-const fs = require("fs");
-const path = require("path");
-const { LoadExternalDB, LoadLocalDB } = require("./lib/loader");
-const { FirstLetterCaps } = require("./lib/helpers");
+const InitDB = require('./lib/db');
+const LoadModels = require('./lib/model');
 
 /**
- * this function initialise the database, after initiliazing the database, this module will load the models.
- * @param {Object} options The options, the configuration of the database, mandatory
- * @param {Object} log The log function, optional
- * @return {Promise} return a promise with the db object
+ * An object To use mongoose within our app.
+ * @param {Object} options The options, Mandatory
+ * @param {Object} log The custom logger function, optional
  */
-function InitDB() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!this.options || typeof this.options !== "object") {
-        return reject(
-          new Error("The options parameter is required and must be an object")
-        );
-      }
-      // set the mongoose to work with promises
-      mongoose.Promise = global.Promise;
-      // enable the database debugger
-      mongoose.set("debug", this.options.debug);
-      // load the local or external databse
-      if (this.options.local) {
-        this.db = await LoadLocalDB(this.options, mongoose, this.log).catch(
-          e => {
-            throw e;
-          }
-        );
-      } else {
-        this.db = await LoadExternalDB(this.options, mongoose, this.log).catch(
-          e => {
-            throw e;
-          }
-        );
-      }
-
-      return resolve();
-    } catch (e) {
-      this.log.error(e);
-      return reject(e);
-    }
-  });
-}
-
-/**
- * this function load the models in Alphabetical order or in a given order.
- * @param {Object} modelDir Where are located the models, mandatory
- * @param {Object} db The DB object, mandatory
- * @param {Object} sort an array that contains the order to load the model, optional
- * @param {Object} log The log function, optional
- * @return {VoidFunction} return nothing
- */
-function LoadModels() {
-  return new Promise((resolve, reject) => {
-    if (!this.options.modelDir || typeof this.options.modelDir !== "string") {
-      return reject(
-        new Error("The modelDir parameter is required and must be a string")
-      );
-    }
-    if (this.options.sort && typeof this.options.sort !== "object") {
-      return reject(new Error("The sort parameter must be an array"));
-    }
-
-    this.log.info("DB : Loading Modules...");
-    let files =
-      this.options.sort && this.options.sort.length !== 0
-        ? this.options.sort
-        : fs.readdirSync(this.options.modelDir);
-
-    files.forEach(filename => {
-      try {
-        if (!this.options.sort || this.options.sort.length === 0) {
-          // if we are in auto detect mode
-          if (filename.indexOf(".js") === -1) {
-            // if the file does not contains .js extension.
-            return; // skip that file
-          }
-        }
-        this.log.info("DB Module :  Load " + filename);
-        let model = FirstLetterCaps(filename.split(".js")[0]);
-        this[model] = require(path.join(this.options.modelDir, filename))(
-          this.db
-        );
-        this.log.info(
-          "DB Module : ",
-          "\x1b[32m",
-          filename,
-          " Loaded",
-          "\x1b[0m"
-        );
-      } catch (e) {
-        this.log.error(e);
-        this.log.error(
-          "DB Module : ",
-          "\x1b[31m",
-          filename,
-          " Not Loaded",
-          "\x1b[0m"
-        );
-        return reject(e);
-      }
-    });
-
-    return resolve();
-  });
-}
-
 function webuxDB(options, log = console) {
   this.db = null;
 
