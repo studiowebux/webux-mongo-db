@@ -1,28 +1,17 @@
 const path = require("path");
+const webuxDB = require("../../index");
 
+// This configuration is NOT recommended for production
 const options = {
   sort: [],
   local: true,
   localPort: 27017,
   debug: true,
-  URL: "@127.0.0.1:27017/framework",
-  user: "",
-  password: "",
-  modelDir: path.join(__dirname, "models"),
-  advanced: {
-    keepAlive: 300000,
-    socketTimeoutMS: 30000,
-    replicaSet: "",
-    autoIndex: false,
-    useNewUrlParser: true,
-    reconnectTries: 30,
-    useUnifiedTopology: true
-  }
+  modelDir: path.join(__dirname, "..", "models")
 };
 
-const webuxDB = require("../index");
-
 async function loadApp() {
+  console.log("LOAD APP/CONFIGURATION BEFORE ...");
   // call db
   const db = new webuxDB(options);
   await db.InitDB();
@@ -48,9 +37,14 @@ async function loadApp() {
     });
   await db.Language.create({ language: "en" });
 
-  console.log("done");
+  console.log("Webux Mongo DB loaded !");
+
+  console.log("You can continue / start the server ...");
 }
 
-loadApp().then(() => {
-  process.exit(0);
-});
+try {
+  loadApp();
+} catch (e) {
+  console.error(e);
+  process.exit(1);
+}

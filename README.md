@@ -29,7 +29,8 @@ const options = {
     replicaSet: "",
     autoIndex: false,
     useNewUrlParser: true,
-    reconnectTries: 30
+    reconnectTries: 30,
+    useUnifiedTopology: true
   }
 };
 ```
