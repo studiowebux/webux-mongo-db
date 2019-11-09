@@ -1,11 +1,11 @@
-# Webux-app
+# @studiowebux/app
 
 This module is a wrapper for mongoose.
 
 # Installation
 
 ```
-npm i --save webux-mongo-db
+npm i --save @studiowebux/mongo-db
 ```
 
 # Usage
@@ -55,7 +55,7 @@ Short example to load the database and create dummy datas,
 ```
 const path = require("path");
 
-const webuxDB = require("webux-mongo-db");
+const webuxDB = require("@studiowebux/mongo-db");
 
 async function loadApp() {
   const db = new webuxDB(options);

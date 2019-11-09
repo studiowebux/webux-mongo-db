@@ -1,5 +1,5 @@
 {
-  "name": "webux-mongo-db",
+  "name": "@studiowebux/mongo-db",
   "version": "1.2.6",
   "description": "Webux wrapper for mongoose and mongo-in-memory",
   "homepage": "https://github.com/studiowebux/webux-mongo-db",
@@ -12,8 +12,8 @@
     "example": "examples"
   },
   "dependencies": {
-    "fs": "0.0.1-security",
-    "mongoose": "^5.6.4",
+    "fs": "0.0.2",
+    "mongoose": "^5.7.6",
     "path": "^0.12.7"
   },
   "devDependencies": {
